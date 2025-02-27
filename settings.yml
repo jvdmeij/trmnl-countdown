@@ -1,0 +1,32 @@
+---
+strategy: static
+no_screen_padding: 'no'
+dark_mode: 'no'
+static_data: ''
+polling_verb: get
+polling_url: ''
+polling_headers: ''
+custom_fields:
+- keyname: countdown_to
+  field_type: date
+  placeholder: '2026-12-31'
+  name: Countdown To
+  description: Choose the date which we should countdown to
+- keyname: eventName
+  field_type: string
+  name: Event name
+  description: Give your event a name
+  placeholder: New Years!
+- keyname: emoji
+  field_type: string
+  name: Emoji
+  description: "Select and use an emoji that clearly represents the theme or nature
+    of the event (e.g., \U0001F389 for celebrations, \U0001F382 for a birthday, \U0001F393
+    for graduations, ..)"
+  placeholder: "\U0001F389"
+- keyname: time_zone
+  field_type: time_zone
+  name: Time Zone
+  description: Where are you located?
+name: Countdown
+refresh_interval: 720

@@ -1,0 +1,56 @@
+{% assign emoji = trmnl:plugin_settings:custom_fields_values:emoji | default: '🎆' %}
+{% assign date = trmnl:plugin_settings:custom_fields_values:countdown_to | default: '2025-12-31' %}
+{% assign description = trmnl:plugin_settings:custom_fields_values:eventName | default: 'New Year!' %}
+{% assign timezone = trmnl:plugin_settings:custom_fields_values:time_zone | default: 'UTC' %}
+
+{% assign today = 'now' | date: '%Y-%m-%d' %}
+{% assign given_date = date | date: '%Y-%m-%d' %}
+
+{% comment %}Convert to timezone specific time{% endcomment %}
+{% assign today_with_tz = 'now' | date: '%Y-%m-%d %H:%M:%S' | date: '%s' | timezone: timezone | date: '%Y-%m-%d' %}
+{% assign given_date_with_tz = given_date | date: '%Y-%m-%d %H:%M:%S' | date: '%s' | timezone: timezone | date: '%Y-%m-%d' %}
+
+{% assign today_seconds = today_with_tz | date: '%s' %}
+{% assign given_seconds = given_date_with_tz | date: '%s' %}
+{% assign diff_seconds = given_seconds | minus: today_seconds %}
+{% assign days_diff = diff_seconds | divided_by: 86400 %}
+{% assign days_diff_abs = days_diff | abs %}
+
+{% if days_diff == 0 %}
+  {% assign days_text = 'today' %}
+{% elsif days_diff_abs == 1 %}
+  {% if days_diff < 0 %}
+    {% assign days_text = 'yesterday' %}
+  {% else %}
+    {% assign days_text = 'tomorrow' %}
+  {% endif %}
+{% else %}
+  {% if days_diff < 0 %}
+    {% assign days_text = days_diff_abs | append: ' days ago' %}
+  {% else %}
+    {% assign days_text = days_diff_abs | append: ' days until' %}
+  {% endif %}
+{% endif %}
+<div class="layout layout--row layout--stretch gap">
+  <div class="flex flex--col border border-2 border-gray-300 border-dashed p-4 rounded-xl">
+    <div class="content text--center stretch-y">
+      <span class="value value--xxlarge" data-fit-value="true" data-fit-value-max-height="60">
+        {{ days_text }}
+      </span>
+    </div>
+    <div class="content text--center">
+      <span class="value value--xxxlarge" data-fit-value="true" data-fit-value-max-height="160">
+        {{ emoji }}
+      </span>
+    </div>
+    <div class="content text--center stretch-y">
+      <span class="value value--xxlarge" data-fit-value="true" data-fit-value-max-height="80">
+        {{ description }}
+      </span>
+    </div>
+  </div>
+</div>
+<div class="title_bar">
+  <img class="image" src="https://usetrmnl.com/images/plugins/trmnl--render.svg" />
+  <span class="title">Countdown</span>
+</div>
